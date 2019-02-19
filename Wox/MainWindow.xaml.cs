@@ -97,8 +97,10 @@ namespace Wox
 
         private void InitializePosition()
         {
-            Top = WindowTop();
-            Left = WindowLeft();
+            var top = WindowTop();
+            var left = WindowLeft();
+            Top = top;
+            Left = left;
             _settings.WindowTop = Top;
             _settings.WindowLeft = Left;
         }
@@ -242,6 +244,9 @@ namespace Wox
 
         private double WindowLeft()
         {
+            if (_settings.RememberLastLaunchLocation)
+                return _settings.WindowLeft;
+
             var screen = Screen.FromPoint(System.Windows.Forms.Cursor.Position);
             var dip1 = WindowsInteropHelper.TransformPixelsToDIP(this, screen.WorkingArea.X, 0);
             var dip2 = WindowsInteropHelper.TransformPixelsToDIP(this, screen.WorkingArea.Width, 0);
@@ -251,6 +256,9 @@ namespace Wox
 
         private double WindowTop()
         {
+            if (_settings.RememberLastLaunchLocation)
+                return _settings.WindowTop;
+
             var screen = Screen.FromPoint(System.Windows.Forms.Cursor.Position);
             var dip1 = WindowsInteropHelper.TransformPixelsToDIP(this, 0, screen.WorkingArea.Y);
             var dip2 = WindowsInteropHelper.TransformPixelsToDIP(this, 0, screen.WorkingArea.Height);
