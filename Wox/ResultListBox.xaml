@@ -64,7 +64,7 @@
     <!--http://stackoverflow.com/questions/16819577/setting-background-color-or-wpf-4-0-listbox-windows-8/#16820062-->
     <ListBox.ItemContainerStyle>
         <Style TargetType="{x:Type ListBoxItem}">
-            <EventSetter Event="MouseEnter" Handler="OnMouseEnter" />
+            <EventSetter Event="Loaded" Handler="OnLoaded" />
             <Setter Property="Height" Value="50" />
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />

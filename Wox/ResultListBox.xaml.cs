@@ -1,6 +1,8 @@
-﻿using System.Runtime.Remoting.Contexts;
+﻿using System;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Wox
 {
@@ -20,9 +22,21 @@ namespace Wox
             }
         }
 
-        private void OnMouseEnter(object sender, MouseEventArgs e)
+        private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            ((ListBoxItem) sender).IsSelected = true;
+            ListBoxItem item = (ListBoxItem)sender;
+            DateTime visibleChangedTimestamp = default(DateTime);
+            TimeSpan minDiff = TimeSpan.FromMilliseconds(100);
+            item.IsVisibleChanged += (sender2, e2) => visibleChangedTimestamp = DateTime.UtcNow;
+
+            item.MouseMove += (sender2, e2) =>
+            {
+                DateTime now = DateTime.UtcNow;
+                TimeSpan diff = now - visibleChangedTimestamp;
+
+                if (diff > minDiff)
+                    item.IsSelected = true;
+            };
         }
     }
 }
