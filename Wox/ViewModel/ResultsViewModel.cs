@@ -99,12 +99,30 @@ namespace Wox.ViewModel
 
         public void SelectNextPage()
         {
-            SelectedIndex = NewIndex(SelectedIndex + MaxResults);
+            int selectedIndex = SelectedIndex;
+            int lastIndex = Results.Count - 1;
+            int newIndex = selectedIndex + MaxResults - 1;
+
+            if (selectedIndex == lastIndex)
+                newIndex = 0;
+            else if (newIndex > lastIndex)
+                newIndex = lastIndex;
+
+            SelectedIndex = newIndex;
         }
 
         public void SelectPrevPage()
         {
-            SelectedIndex = NewIndex(SelectedIndex - MaxResults);
+            int selectedIndex = SelectedIndex;
+            int lastIndex = Results.Count - 1;
+            int newIndex = selectedIndex - MaxResults + 1;
+
+            if (selectedIndex == 0)
+                newIndex = lastIndex;
+            else if (newIndex < 0)
+                newIndex = 0;
+
+            SelectedIndex = newIndex;
         }
 
         public void Clear()
