@@ -1,15 +1,14 @@
-﻿using System.Runtime.Remoting.Contexts;
-using System.Windows;
+﻿using System;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Wox
 {
     [Synchronization]
     public partial class ResultListBox
     {
-        private Point _lastpos;
-        private ListBoxItem curItem = null;
         public ResultListBox()
         {
             InitializeComponent();
@@ -23,28 +22,21 @@ namespace Wox
             }
         }
 
-        private void OnMouseEnter(object sender, MouseEventArgs e)
+        private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            curItem = (ListBoxItem)sender;
-            var p = e.GetPosition((IInputElement)sender);
-            _lastpos = p;
-        }
+            ListBoxItem item = (ListBoxItem)sender;
+            DateTime visibleChangedTimestamp = default(DateTime);
+            TimeSpan minDiff = TimeSpan.FromMilliseconds(100);
+            item.IsVisibleChanged += (sender2, e2) => visibleChangedTimestamp = DateTime.UtcNow;
 
-        private void OnMouseMove(object sender, MouseEventArgs e)
-        {
-            var p = e.GetPosition((IInputElement)sender);
-            if (_lastpos != p)
+            item.MouseMove += (sender2, e2) =>
             {
-                ((ListBoxItem) sender).IsSelected = true;
-            }
-        }
+                DateTime now = DateTime.UtcNow;
+                TimeSpan diff = now - visibleChangedTimestamp;
 
-        private void ListBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (curItem != null)
-            {
-                curItem.IsSelected = true;
-            }
+                if (diff > minDiff)
+                    item.IsSelected = true;
+            };
         }
     }
 }
