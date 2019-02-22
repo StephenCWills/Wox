@@ -10,6 +10,8 @@ namespace Wox
     [Synchronization]
     public partial class ResultListBox
     {
+        private Point _mousePosition;
+
         public ResultListBox()
         {
             InitializeComponent();
@@ -28,6 +30,7 @@ namespace Wox
             ListBoxItem item = (ListBoxItem)sender;
             DateTime visibleChangedTimestamp = default(DateTime);
             TimeSpan minDiff = TimeSpan.FromMilliseconds(100);
+
             item.IsVisibleChanged += (sender2, e2) => visibleChangedTimestamp = DateTime.UtcNow;
 
             item.MouseMove += (sender2, e2) =>
@@ -47,6 +50,15 @@ namespace Wox
 
                 item.IsSelected = true;
             };
+        }
+
+        private void OnPreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            Point lastPosition = _mousePosition;
+            _mousePosition = e.MouseDevice.GetPosition(this);
+
+            if (lastPosition == _mousePosition)
+                e.Handled = true;
         }
     }
 }

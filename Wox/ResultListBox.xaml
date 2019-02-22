@@ -17,7 +17,7 @@
          KeyboardNavigation.DirectionalNavigation="Cycle" SelectionMode="Single"
          VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Standard"
          SelectionChanged="OnSelectionChanged"
-         IsSynchronizedWithCurrentItem="True">
+         IsSynchronizedWithCurrentItem="True" PreviewMouseMove="OnPreviewMouseMove">
     <!--IsSynchronizedWithCurrentItem: http://stackoverflow.com/a/7833798/2833083-->
     <ListBox.ItemTemplate>
         <DataTemplate>
