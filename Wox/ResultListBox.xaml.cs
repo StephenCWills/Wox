@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Remoting.Contexts;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -34,8 +35,17 @@ namespace Wox
                 DateTime now = DateTime.UtcNow;
                 TimeSpan diff = now - visibleChangedTimestamp;
 
-                if (diff > minDiff)
-                    item.IsSelected = true;
+                if (diff <= minDiff)
+                    return;
+
+                Rect itemBounds = new Rect(0.0D, 0.0D, item.ActualWidth, item.ActualHeight);
+                Rect transformBounds = item.TransformToAncestor(this).TransformBounds(itemBounds);
+                Rect boxBounds = new Rect(0.0D, 0.0D, ActualWidth, ActualHeight);
+
+                if (!boxBounds.Contains(transformBounds))
+                    return;
+
+                item.IsSelected = true;
             };
         }
     }
