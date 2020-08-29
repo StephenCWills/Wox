@@ -95,7 +95,7 @@ namespace Wox.Plugin.Program
             });
 
             if (token.IsCancellationRequested) { return new List<Result>(); }
-            OrderedParallelQuery<Result> sorted = resultRaw.AsParallel().OrderByDescending(r => r.Score);
+            IOrderedEnumerable<Result> sorted = resultRaw.AsEnumerable().OrderByDescending(r => r.Score);
             List<Result> results = new List<Result>();
             foreach (Result r in sorted)
             {
